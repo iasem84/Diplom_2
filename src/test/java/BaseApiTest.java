@@ -1,4 +1,3 @@
-import api.OrderApi;
 import api.UserApi;
 import com.github.javafaker.Faker;
 import io.restassured.response.ValidatableResponse;
@@ -18,9 +17,7 @@ public class BaseApiTest {
     protected String password;
     protected String name;
     protected String token;
-    protected String authToken;
     protected ValidatableResponse response;
-    protected OrderApi orderApi;
 
     @Before
     public void initUser() {
@@ -53,13 +50,4 @@ public class BaseApiTest {
         loginData = new LoginData(email, password);
         response = userApi.loginUser(loginData);
     }
-
-    protected void getIngr() {
-        response = orderApi.getIngredient();
-        String id = response.extract().body().jsonPath().getString("data");
-    }
-
-//    protected void changeUserData(UserData userData) {
-//        userData = new UserData();
-//    }
 }

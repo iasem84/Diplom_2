@@ -9,10 +9,10 @@ import static io.restassured.RestAssured.given;
 
 public class UserApi extends RestApi{
 
-    public static final String CREATE_USER_URI = "/api/auth/register";
-    public static final String LOGIN_USER_URI = "/api/auth/login";
-    public static final String DELETE_USER_URI = "/api/auth/user";
-    public static final String CHANGE_USER_DATA_URI = "/api/auth/user";
+    private static final String CREATE_USER_URI = "/api/auth/register";
+    private static final String LOGIN_USER_URI = "/api/auth/login";
+    private static final String DELETE_USER_URI = "/api/auth/user";
+    private static final String CHANGE_USER_DATA_URI = "/api/auth/user";
 
     @Step("Create user")
     public ValidatableResponse createUser(UserData user) {

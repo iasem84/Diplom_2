@@ -8,7 +8,7 @@ import static io.restassured.RestAssured.given;
 
 public class OrderApi extends RestApi {
 
-    public static final String ORDER_URI = "/api/orders";
+    private static final String ORDER_URI = "/api/orders";
     private static final String INGREDIENT_URI = "/api/ingredients";
 
     @Step("Create order with authorisation")
