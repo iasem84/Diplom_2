@@ -2,23 +2,8 @@ package model;
 
 import java.util.List;
 
+@lombok.Data
 public class IngredientData {
     private String success;
     private List<Data> data;
-
-    public String getSuccess() {
-        return success;
-    }
-
-    public void setSuccess(String success) {
-        this.success = success;
-    }
-
-    public List<Data> getData() {
-        return data;
-    }
-
-    public void setData(List<Data> data) {
-        this.data = data;
-    }
 }

@@ -69,8 +69,8 @@ public class GetOrderTest {
         orderApi = new OrderApi();
         IngredientData ingredientData = orderApi.getIngredient().extract().as(IngredientData.class);
         List<String> ingredients = new ArrayList<>();
-        ingredients.add(ingredientData.getData().get(0).get_id());
-        ingredients.add(ingredientData.getData().get(4).get_id());
+        ingredients.add(ingredientData.getData().get(0).getId());
+        ingredients.add(ingredientData.getData().get(4).getId());
         OrderData orderData = new OrderData(ingredients);
         orderApi.createOrderWithAuth(orderData, token);
 

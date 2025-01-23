@@ -33,9 +33,25 @@ public class CreateOrderTest {
         orderApi = new OrderApi();
         ingredientData = orderApi.getIngredient().extract().as(IngredientData.class);
         ingredients = new ArrayList<>();
-        ingredients.add(ingredientData.getData().get(0).get_id());
-        ingredients.add(ingredientData.getData().get(4).get_id());
+        ingredients.add(ingredientData.getData().get(0).getId());
+        ingredients.add(ingredientData.getData().get(4).getId());
         orderData = new OrderData(ingredients);
+    }
+
+    @Before
+    public void initUser() {
+        Faker faker = new Faker();
+        String email = faker.internet().emailAddress();
+        String password = faker.internet().password();
+        String name = faker.name().firstName();
+
+        UserData userData = new UserData(email, password, name);
+        userApi = new UserApi();
+        userApi.createUser(userData);
+
+        LoginData loginData = new LoginData(email, password);
+        response = userApi.loginUser(loginData);
+        token = response.extract().body().jsonPath().getString("accessToken");
     }
 
     @After
@@ -52,19 +68,6 @@ public class CreateOrderTest {
     @Description("Check order can be created with authorisation")
     @Test
     public void orderCanBeCreatedWithAuthTest() {
-        Faker faker = new Faker();
-        String email = faker.internet().emailAddress();
-        String password = faker.internet().password();
-        String name = faker.name().firstName();
-
-        UserData userData = new UserData(email, password, name);
-        userApi = new UserApi();
-        userApi.createUser(userData);
-
-        LoginData loginData = new LoginData(email, password);
-        response = userApi.loginUser(loginData);
-        token = response.extract().body().jsonPath().getString("accessToken");
-
         response = orderApi.createOrderWithAuth(orderData, token);
         response.log().all()
                 .assertThat()
@@ -77,7 +80,6 @@ public class CreateOrderTest {
     @Description("Check order can be created without authorisation")
     @Test
     public void orderCanBeCreatedWithoutAuthTest() {
-
         response = orderApi.createOrderWithoutAuth(orderData);
         response.log().all()
                 .assertThat()
@@ -90,9 +92,8 @@ public class CreateOrderTest {
     @Description("Check order can't be created without ingredient")
     @Test
     public void orderCantBeCreatedWithoutIngredientTest() {
-
         orderData = new OrderData();
-        response = orderApi.createOrderWithoutAuth(orderData);
+        response = orderApi.createOrderWithAuth(orderData, token);
         response.log().all()
                 .assertThat()
                 .statusCode(HttpStatus.SC_BAD_REQUEST)
@@ -104,10 +105,9 @@ public class CreateOrderTest {
     @Description("Check order can't be created with wrong ingredient")
     @Test
     public void orderCantBeCreatedWithWrongIngredientTest() {
-
-        ingredients.add(ingredientData.getData().get(1).get_id() + "8");
+        ingredients.add(ingredientData.getData().get(1).getId() + "8");
         orderData = new OrderData(ingredients);
-        response = orderApi.createOrderWithoutAuth(orderData);
+        response = orderApi.createOrderWithAuth(orderData, token);
         response.log().all()
                 .assertThat()
                 .statusCode(HttpStatus.SC_INTERNAL_SERVER_ERROR);

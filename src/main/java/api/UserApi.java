@@ -5,14 +5,10 @@ import io.restassured.response.ValidatableResponse;
 import model.LoginData;
 import model.UserData;
 
+import static api.Endpoints.*;
 import static io.restassured.RestAssured.given;
 
 public class UserApi extends RestApi{
-
-    private static final String CREATE_USER_URI = "/api/auth/register";
-    private static final String LOGIN_USER_URI = "/api/auth/login";
-    private static final String DELETE_USER_URI = "/api/auth/user";
-    private static final String CHANGE_USER_DATA_URI = "/api/auth/user";
 
     @Step("Create user")
     public ValidatableResponse createUser(UserData user) {
@@ -68,5 +64,4 @@ public class UserApi extends RestApi{
                 .patch(CHANGE_USER_DATA_URI)
                 .then();
     }
-
 }

@@ -4,12 +4,11 @@ import io.qameta.allure.Step;
 import io.restassured.response.ValidatableResponse;
 import model.OrderData;
 
+import static api.Endpoints.INGREDIENT_URI;
+import static api.Endpoints.ORDER_URI;
 import static io.restassured.RestAssured.given;
 
 public class OrderApi extends RestApi {
-
-    private static final String ORDER_URI = "/api/orders";
-    private static final String INGREDIENT_URI = "/api/ingredients";
 
     @Step("Create order with authorisation")
     public ValidatableResponse createOrderWithAuth(OrderData orderData, String token) {

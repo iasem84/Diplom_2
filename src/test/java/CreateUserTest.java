@@ -23,7 +23,6 @@ public class CreateUserTest extends BaseApiTest {
     @Description("User can't be created if it already exist")
     @Test
     public void sameUserCantBeCreatedTest() {
-
         createUser(email, password, name);
         response = userApi.createUser(userData);
         response.log().all()
@@ -37,7 +36,6 @@ public class CreateUserTest extends BaseApiTest {
     @Description("User can't be created without email")
     @Test
     public void userCantBeCreatedWithoutEmailTest() {
-
         createUser(null, password, name);
         response.log().all()
                 .assertThat()
@@ -50,8 +48,19 @@ public class CreateUserTest extends BaseApiTest {
     @Description("User can't be created without password")
     @Test
     public void userCantBeCreatedWithoutPasswordTest() {
-
         createUser(email, null, name);
+        response.log().all()
+                .assertThat()
+                .statusCode(HttpStatus.SC_FORBIDDEN)
+                .and()
+                .body("message", is("Email, password and name are required fields"));
+    }
+
+    @DisplayName("User can't be created without name test")
+    @Description("User can't be created without name")
+    @Test
+    public void userCantBeCreatedWithoutNameTest() {
+        createUser(email, password, null);
         response.log().all()
                 .assertThat()
                 .statusCode(HttpStatus.SC_FORBIDDEN)
