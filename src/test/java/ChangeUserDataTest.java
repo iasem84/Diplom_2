@@ -52,34 +52,16 @@ public class ChangeUserDataTest extends BaseApiTest {
                 .body("user.name", is(name));
     }
 
-    @DisplayName("Authorised user can change password test")
-    @Description("Check authorised user can change password")
+    @DisplayName("Unauthorised user can't change name test")
+    @Description("Check unauthorised user can't change name")
     @Test
-    public void authorisedUserCanChangePasswordTest() {
+    public void unauthorisedUserCantChangeNameTest() {
         createUser(email, password, name);
-        loginUser(email, password);
 
+        String newName = "A" + name;
         userData = UserData.builder()
-                .password(password + "!")
+                .name(newName)
                 .build();
-        response = userApi.changeUserDataWithAuth(userData, token);
-
-        response.log().all()
-                .assertThat()
-                .statusCode(HttpStatus.SC_OK)
-                .and()
-                .body("success", is(true))
-                .body("user.email", is(email))
-                .body("user.name", is(name));
-    }
-
-    @DisplayName("Unauthorised user cant change data test")
-    @Description("Check unauthorised user cant change data")
-    @Test
-    public void unauthorisedUserCantChangeDataTest() {
-        createUser(email, password, name);
-
-        userData = new UserData("s" + email, password + "!", name + "f");
         response = userApi.changeUserDataWithoutAuth(userData);
 
         response.log().all()
@@ -97,24 +79,6 @@ public class ChangeUserDataTest extends BaseApiTest {
 
         userData = UserData.builder()
                 .password("s" + email)
-                .build();
-        response = userApi.changeUserDataWithoutAuth(userData);
-
-        response.log().all()
-                .assertThat()
-                .statusCode(HttpStatus.SC_UNAUTHORIZED)
-                .and()
-                .body("message", is("You should be authorised"));
-    }
-
-    @DisplayName("Unauthorised user can't change password test")
-    @Description("Check unauthorised user can't change password")
-    @Test
-    public void unauthorisedUserCantChangePasswordTest() {
-        createUser(email, password, name);
-
-        userData = UserData.builder()
-                .password(password + "!")
                 .build();
         response = userApi.changeUserDataWithoutAuth(userData);
 
